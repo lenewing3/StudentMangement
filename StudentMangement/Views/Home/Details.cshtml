@@ -1,0 +1,20 @@
+﻿@model HomeDetailsViewModel
+@{
+    ViewBag.Title = "学生详情页";
+}
+
+<h3>@Model.PageTitle</h3>
+
+<div>
+    姓名  :   @Model.Student.Name
+</div>
+<div>
+    邮箱  :   @Model.Student.Email
+</div>
+<div>
+    年级  :   @Model.Student.ClassName
+</div>
+
+@section Scripts{ 
+    <script src="~/js/CustomScript.js"></script>
+}
