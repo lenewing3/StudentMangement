@@ -46,13 +46,13 @@ namespace StudentMangement
             //app.UseMvcWithDefaultRoute();
 
             //mvc常规路由配置
-            //app.UseMvc(router =>
-            //{
-            //    router.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-            //});
+            app.UseMvc(router =>
+            {
+                router.MapRoute("default", "{controller=home}/{action=index}/{id?}");
+            });
 
             //mvc属性路由配置
-            app.UseMvc();
+            //app.UseMvc();
 
             //app.Run(async (context) =>
             //{
