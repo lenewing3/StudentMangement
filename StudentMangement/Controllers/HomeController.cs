@@ -19,18 +19,21 @@ namespace StudentMangement.Controllers
         {
             _studentRepository = studentRepository;
         }
-        // GET: /<controller>/
+        [Route("")]
+        [Route("Home")]
+        [Route("Home/Index")]
         public IActionResult Index()
         {
             IEnumerable<Student> students = _studentRepository.GetAllStudents();
             //返回学生列表
             return View(students);
         }
-        public IActionResult Details(int id = 1)
+        [Route("Home/Details/{id?}")]
+        public IActionResult Details(int? id)
         {
             HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel
             {
-                Student = _studentRepository.GetStudent(id),
+                Student = _studentRepository.GetStudent(id??1),
                 PageTitle = "学生信息"
             };
             //返回学生信息

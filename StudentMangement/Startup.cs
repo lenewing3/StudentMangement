@@ -42,8 +42,17 @@ namespace StudentMangement
             //静态文件中间件
             app.UseStaticFiles();
 
-            //mvc默认配置路由
-            app.UseMvcWithDefaultRoute();
+            //mvc默认路由配置
+            //app.UseMvcWithDefaultRoute();
+
+            //mvc常规路由配置
+            //app.UseMvc(router =>
+            //{
+            //    router.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            //});
+
+            //mvc属性路由配置
+            app.UseMvc();
 
             //app.Run(async (context) =>
             //{
