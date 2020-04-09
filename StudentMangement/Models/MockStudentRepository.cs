@@ -12,10 +12,17 @@ namespace StudentMangement.Models
         {
             _studentsList = new List<Student>()
             {
-                new Student(){Id=1,Name="张三",ClassName="一年级",Email="Tony_zhang@test.com"},
-                new Student(){Id=2,Name="李四",ClassName="二年级",Email="Lisi@test.com"},
-                new Student(){Id=3,Name="王五",ClassName="二年级",Email="King_five@test.com"}
+                new Student(){Id=1,Name="张三",ClassName=ClassNameEnum.FirstGrade,Email="Tony_zhang@test.com"},
+                new Student(){Id=2,Name="李四",ClassName=ClassNameEnum.SecondGrade,Email="Lisi@test.com"},
+                new Student(){Id=3,Name="王五",ClassName=ClassNameEnum.ThirdGrade,Email="King_five@test.com"}
             };
+        }
+
+        public Student Add(Student student)
+        {
+            student.Id = _studentsList.Max(s => s.Id) + 1;
+            _studentsList.Add(student);
+            return student;
         }
 
         public IEnumerable<Student> GetAllStudents()

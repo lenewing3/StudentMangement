@@ -34,5 +34,21 @@ namespace StudentMangement.Controllers
             //返回学生信息
             return View(homeDetailsViewModel);
         }
+        [HttpGet]
+        public IActionResult Create()
+        {
+            //返回Create视图
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Student student)
+        {
+            if (ModelState.IsValid)
+            {
+                Student newStudent = _studentRepository.Add(student);
+                return RedirectToAction("Details", new { id = newStudent.Id });
+            }
+            return View();
+        }
     }
 }
