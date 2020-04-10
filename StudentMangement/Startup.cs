@@ -29,7 +29,7 @@ namespace StudentMangement
                 options => options.UseSqlServer(_configuration.GetConnectionString("StudentDBConnection"))
                 );
             services.AddMvc();
-            services.AddSingleton<IStudentRepository, MockStudentRepository>();
+            services.AddScoped<IStudentRepository, SQLStudentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
