@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentMangement.Models;
 
 namespace StudentMangement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200413033024_SeedStudentsTable")]
+    partial class SeedStudentsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,16 +35,12 @@ namespace StudentMangement.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<string>("PhotoPath");
-
                     b.HasKey("Id");
 
                     b.ToTable("Students");
 
                     b.HasData(
-                        new { Id = 1, ClassName = 1, Email = "xiaohuanxi@qq.com", Name = "小欢喜" },
-                        new { Id = 2, ClassName = 2, Email = "xiaopengyu@sohu.com", Name = "小彭宇" },
-                        new { Id = 3, ClassName = 3, Email = "pengyuyan@163.com", Name = "彭于晏" }
+                        new { Id = 1, ClassName = 1, Email = "xiaohuanxi@qq.com", Name = "小欢喜" }
                     );
                 });
 #pragma warning restore 612, 618
