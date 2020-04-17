@@ -1,19 +1,18 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using StudentMangement.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StudentMangement.Models
+namespace StudentMangement.ViewModels
 {
-    /// <summary>
-    /// 学生模型
-    /// </summary>
-    public class Student
+    public class StudentCreateViewModel
     {
         public int Id { get; set; }
         [Display(Name = "姓名")]
-        [Required(ErrorMessage = "请输入名字"),MaxLength(50, ErrorMessage = "名字长度不能超过50个字符")]
+        [Required(ErrorMessage = "请输入名字"), MaxLength(50, ErrorMessage = "名字长度不能超过50个字符")]
         public string Name { get; set; }
         [Display(Name = "年级")]
         [Required(ErrorMessage = "请选择年级")]
@@ -22,6 +21,7 @@ namespace StudentMangement.Models
         [Required(ErrorMessage = "请输入邮箱地址")]
         [RegularExpression(@"^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$", ErrorMessage = "邮箱地址格式错误")]
         public string Email { get; set; }
-        public string PhotoPath { get; set; }
+        [Display(Name = "头像")]
+        public IFormFile Photo { get; set; }
     }
 }
