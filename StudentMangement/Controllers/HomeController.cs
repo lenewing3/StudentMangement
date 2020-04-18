@@ -53,9 +53,14 @@ namespace StudentMangement.Controllers
                 string uniqueFileName = null;
                 if (model.Photo != null)
                 {
+                    //通过已经依赖注入的服务:HostingEnvironment的WebRootPath属性获取"wwwroot"目录的路径
+                    //使用Path.Combine()方法生成img目录的路径,该目录是"wwwroot"的子目录
                     string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "img");
+                    //使用Guid.NewGuid()方法生成唯一标识后重命名上传的文件名,重命名格式:"唯一标识_原文件名"
                     uniqueFileName = $"{Guid.NewGuid().ToString()}_{model.Photo.FileName}";
+                    //使用Path.Combine()方法生成文件存储路径
                     string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    //将上传的文件复制到目标流
                     model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
                 }
                 Student newStudent = new Student
