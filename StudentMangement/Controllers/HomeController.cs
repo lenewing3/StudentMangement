@@ -50,27 +50,14 @@ namespace StudentMangement.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueFileName = null;
-                if (model.Photo != null)
-                {
-                    //通过已经依赖注入的服务:HostingEnvironment的WebRootPath属性获取"wwwroot"目录的路径
-                    //使用Path.Combine()方法生成img目录的路径,该目录是"wwwroot"的子目录
-                    string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "img");
-                    //使用Guid.NewGuid()方法生成唯一标识后重命名上传的文件名,重命名格式:"唯一标识_原文件名"
-                    uniqueFileName = $"{Guid.NewGuid().ToString()}_{model.Photo.FileName}";
-                    //使用Path.Combine()方法生成文件存储路径
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    //将上传的文件复制到目标流
-                    model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
-                }
                 Student newStudent = new Student
                 {
                     Name = model.Name,
                     Email = model.Email,
                     ClassName = model.ClassName,
-                    PhotoPath = uniqueFileName
+                    PhotoPath = ProcessUploadFile(model)
                 };
-                _studentRepository.Add(newStudent);
+                newStudent = _studentRepository.Add(newStudent);
                 return RedirectToAction("Details", new { id = newStudent.Id });
             }
             return View();
@@ -92,6 +79,62 @@ namespace StudentMangement.Controllers
                 return View(studentEditViewModel);
             }
             return View();
+        }
+        [HttpPost]
+        public IActionResult Edit(StudentEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Student student = _studentRepository.GetStudent(model.Id);
+                if (student != null)
+                {
+                    student.Name = model.Name;
+                    student.Email = model.Email;
+                    student.ClassName = model.ClassName;
+
+                    //判断是否更新头像
+                    if (model.Photo != null)
+                    {
+                        //判断原来是否有头像
+                        if (model.ExistingPhotoPath != null)
+                        {
+                            //获得原头像图片路径
+                            string oldFilePath = Path.Combine(_hostingEnvironment.WebRootPath, "img", model.ExistingPhotoPath);
+                            //删除原头像
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                        student.PhotoPath = ProcessUploadFile(model);
+                    }
+                    _studentRepository.Update(student);
+                    return RedirectToAction("Details", new { id = student.Id });
+                }
+            }
+            return View(model);
+        }
+        /// <summary>
+        /// 将上传文件保存到指定的路径中,并返回上传文件保存的路径
+        /// </summary>
+        /// <returns></returns>
+        private string ProcessUploadFile(StudentCreateViewModel model)
+        {
+            string uniqueFileName = null;
+            if (model.Photo != null)
+            {
+                //通过已经依赖注入的服务:HostingEnvironment的WebRootPath属性获取"wwwroot"目录的路径
+                //使用Path.Combine()方法生成img目录的路径,该目录是"wwwroot"的子目录
+                string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "img");
+                //使用Guid.NewGuid()方法生成唯一标识后重命名上传的文件名,重命名格式:"唯一标识_原文件名"
+                uniqueFileName = $"{Guid.NewGuid().ToString()}_{model.Photo.FileName}";
+                //使用Path.Combine()方法生成文件存储路径
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                //FileStream为非托管型资源,需要手动释放,使用using语句进行释放.
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    //将上传的文件复制到目标流
+                    model.Photo.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
         }
     }
 }
