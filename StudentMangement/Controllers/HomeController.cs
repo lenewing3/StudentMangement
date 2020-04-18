@@ -75,5 +75,23 @@ namespace StudentMangement.Controllers
             }
             return View();
         }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Student student = _studentRepository.GetStudent(id);
+            if (student != null)
+            {
+                StudentEditViewModel studentEditViewModel = new StudentEditViewModel
+                {
+                    Id = student.Id,
+                    Name = student.Name,
+                    ClassName = student.ClassName,
+                    Email = student.Email,
+                    ExistingPhotoPath = student.PhotoPath
+                };
+                return View(studentEditViewModel);
+            }
+            return View();
+        }
     }
 }

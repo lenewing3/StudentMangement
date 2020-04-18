@@ -10,7 +10,6 @@ namespace StudentMangement.ViewModels
 {
     public class StudentCreateViewModel
     {
-        public int Id { get; set; }
         [Display(Name = "姓名")]
         [Required(ErrorMessage = "请输入名字"), MaxLength(50, ErrorMessage = "名字长度不能超过50个字符")]
         public string Name { get; set; }
