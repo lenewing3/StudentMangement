@@ -39,6 +39,11 @@ namespace StudentMangement
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+            }
 
             //添加默认文件的中间件
             //app.UseDefaultFiles();

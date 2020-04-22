@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using StudentMangement.Models;
 using StudentMangement.ViewModels;
 
@@ -16,12 +17,14 @@ namespace StudentMangement.Controllers
     {
         private readonly IStudentRepository _studentRepository;
         private readonly HostingEnvironment _hostingEnvironment;
+        private readonly ILogger<HomeController> _logger;
 
         //构造函数注入IStudentRepository
-        public HomeController(IStudentRepository studentRepository, HostingEnvironment hostingEnvironment)
+        public HomeController(IStudentRepository studentRepository, HostingEnvironment hostingEnvironment, ILogger<HomeController> logger)
         {
             _studentRepository = studentRepository;
             _hostingEnvironment = hostingEnvironment;
+            _logger = logger;
         }
         public IActionResult Index()
         {
@@ -29,15 +32,34 @@ namespace StudentMangement.Controllers
             //返回学生列表
             return View(students);
         }
-        public IActionResult Details(int? id)   //声明参数时在类型后加?号代表该参数为可空参数
+        public IActionResult Details(int id)
+        //public IActionResult Details(int? id)   //声明参数时在类型后加?号代表该参数为可空参数
         {
-            HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel
+            _logger.LogTrace("Trace(跟踪) Log");
+            _logger.LogDebug("Debug(调试) Log");
+            _logger.LogInformation("Information(信息) Log");
+            _logger.LogWarning("Warning(警告) Log");
+            _logger.LogError("Error(错误) Log");
+            _logger.LogCritical("Critical(严重) Log");
+
+            //throw new Exception("Details页面异常");
+            Student student = _studentRepository.GetStudent(id);
+            if (student != null)
             {
-                Student = _studentRepository.GetStudent(id??1), //??判断赋值表达式，当表达式左边的值为null时，将表达式右边的值赋给左边，否则跳过。
-                PageTitle = "学生信息"
-            };
-            //返回学生信息
-            return View(homeDetailsViewModel);
+                HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel
+                {
+                    Student = student,
+                    //Student = _studentRepository.GetStudent(id??1), //??判断赋值表达式，当表达式左边的值为null时，将表达式右边的值赋给左边，否则跳过。
+                    PageTitle = "学生信息"
+                };
+                //返回学生信息
+                return View(homeDetailsViewModel);
+            }
+            else
+            {
+                Response.StatusCode = 404;
+                return View("StudentNotFound", id);
+            }
         }
         [HttpGet]
         public IActionResult Create()
